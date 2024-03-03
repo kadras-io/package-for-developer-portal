@@ -13,7 +13,7 @@ jobs:
       packages: write
     uses: kadras-io/github-reusable-workflows/.github/workflows/package-release.yml@main
     with:
-      package-name-slug: kadras-developer-portal
+      package-name-slug: developer-portal
       package-name-display: Kadras Developer Portal
       registry-server: ghcr.io
       registry-username: ${{ github.actor }}
