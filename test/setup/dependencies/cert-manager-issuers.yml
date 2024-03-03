@@ -1,0 +1,29 @@
+---
+apiVersion: packaging.carvel.dev/v1alpha1
+kind: PackageInstall
+metadata:
+  name: cert-manager-issuers
+  namespace: tests
+  annotations:
+    kapp.k14s.io/change-group: cert-manager-issuers
+    kapp.k14s.io/change-rule.cert-manager: upsert after upserting cert-manager
+    kapp.k14s.io/change-rule.serviceaccount: delete before deleting serviceaccount
+spec:
+  serviceAccountName: kadras-install-sa
+  packageRef:
+    refName: cert-manager-issuers.packages.kadras.io
+    versionSelection:
+      constraints: 0.2.3
+  values:
+    - secretRef:
+        name: cert-manager-issuers-values
+
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: cert-manager-issuers-values
+  namespace: tests
+stringData:
+  values.yaml: |
+    # Default

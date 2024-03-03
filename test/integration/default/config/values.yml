@@ -1,0 +1,9 @@
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: developer-portal-values
+  namespace: tests
+stringData:
+  values.yaml: |
+    # Default configuration

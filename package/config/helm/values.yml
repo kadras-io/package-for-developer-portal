@@ -1,0 +1,77 @@
+---
+global:
+  imagePullSecrets:
+    - canonical-registry-credentials
+
+backstage:
+  image:
+    registry: ghcr.io
+    repository: kadras-io/kadras-developer-portal
+    tag: latest
+  
+  args:
+    - '--config'
+    - '/app/app-config.yaml'
+    - '--config'
+    - '/app/app-config.production.yaml'
+
+  replicas: 1
+  
+  readinessProbe:
+    failureThreshold: 3
+    httpGet:
+      path: /healthcheck
+      port: 7007
+      scheme: HTTP
+    initialDelaySeconds: 30
+    periodSeconds: 10
+    successThreshold: 2
+    timeoutSeconds: 2
+
+  livenessProbe:
+    failureThreshold: 3
+    httpGet:
+      path: /healthcheck
+      port: 7007
+      scheme: HTTP
+    initialDelaySeconds: 60
+    periodSeconds: 10
+    successThreshold: 1
+    timeoutSeconds: 2
+  
+  extraEnvVars:
+    - name: BACKSTAGE_BASE_URL
+      value: https://{{ .Values.ingress.host }}
+    - name: NODE_OPTIONS
+      value: "--no-node-snapshot"
+  
+  extraEnvVarsSecrets:
+    - backstage-credentials
+    - developer-portal-secrets
+
+ingress:
+  enabled: true
+  annotations:
+    cert-manager.io/cluster-issuer: kadras-ca-issuer
+  className: contour
+  host: backstage.127.0.0.1.sslip.io
+  tls:
+    enabled: true
+    secretName: backstage-tls-certificate
+
+postgresql:
+  enabled: true
+  postgresqlDataDir: /var/lib/pgsql/data/userdata
+  auth:
+    existingSecret: postgresql-credentials
+  image:
+    registry: docker.io
+    repository: bitnami/postgresql
+    tag: 16.2.0
+    pullSecrets:
+      - canonical-registry-credentials
+  primary:
+    persistence:
+      enabled: true
+      size: 1Gi
+      mountPath: /var/lib/pgsql/data

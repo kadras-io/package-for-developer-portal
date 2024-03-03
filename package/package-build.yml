@@ -1,0 +1,32 @@
+apiVersion: kctrl.carvel.dev/v1alpha1
+kind: PackageBuild
+metadata:
+  creationTimestamp: null
+  name: developer-portal.packages.kadras.io
+spec:
+  template:
+    spec:
+      app:
+        spec:
+          deploy:
+          - kapp:
+              intoNs: backstage
+          template:
+          - helmTemplate:
+              name: backstage
+              namespace: backstage
+              path: config/helm/upstream/backstage
+              valuesFrom:
+              - path: config/helm/values.yml
+          - ytt:
+              ignoreUnknownComments: true
+              paths:
+              - '-'
+              - config/carvel
+          - kbld: {}
+      export:
+      - imgpkgBundle:
+          image: ghcr.io/kadras-io/package-for-developer-portal
+          useKbldImagesLock: true
+        includePaths:
+        - config

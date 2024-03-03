@@ -1,0 +1,12 @@
+apiVersion: vendir.k14s.io/v1alpha1
+directories:
+- contents:
+  - helmChart:
+      name: backstage
+      repository:
+        url: oci://ghcr.io/backstage/charts
+      version: 1.9.1
+    path: backstage
+  path: config/helm/upstream
+kind: Config
+minimumRequiredVersion: 0.32.0

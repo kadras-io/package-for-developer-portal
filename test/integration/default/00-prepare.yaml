@@ -1,0 +1,16 @@
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: backstage
+
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: developer-portal-secrets
+  namespace: backstage
+stringData:
+  GITHUB_TOKEN: token
+  GITHUB_AUTH_PROVIDER_CLIENT_ID: clientId
+  GITHUB_AUTH_PROVIDER_CLIENT_SECRET: clientSecret
