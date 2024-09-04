@@ -67,6 +67,9 @@ ingress:
   # -- Hostname to be used to expose the route to access the backstage application (e.g: backstage.IP.nip.io)
   host: ""
 
+  # -- Path to be used to expose the full route to access the backstage application (e.g: IP.nip.io/backstage)
+  path: "/"
+
   # -- Ingress TLS parameters
   tls:
 
@@ -97,6 +100,9 @@ backstage:
 
     # -- Backstage image tag (immutable tags are recommended)
     tag: latest
+
+    # -- Backstage image digest (digest takes precedence over image tag)
+    digest: ""
 
     # -- Specify a imagePullPolicy.
     # Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'

@@ -2,7 +2,7 @@
 # Backstage Helm Chart
 
 [![Artifact Hub](https://img.shields.io/endpoint?url=https://artifacthub.io/badge/repository/backstage)](https://artifacthub.io/packages/search?repo=backstage)
-![Version: 1.9.1](https://img.shields.io/badge/Version-1.9.1-informational?style=flat-square)
+![Version: 1.9.6](https://img.shields.io/badge/Version-1.9.6-informational?style=flat-square)
 ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
 
 A Helm chart for deploying a Backstage application
@@ -31,7 +31,6 @@ Backstage unifies all your infrastructure tooling, services, and documentation t
 ## TL;DR
 
 ```console
-helm repo add bitnami https://charts.bitnami.com/bitnami
 helm repo add backstage https://backstage.github.io/charts
 
 helm install my-release backstage/backstage
@@ -43,8 +42,8 @@ This chart bootstraps a [Backstage](https://backstage.io/docs/deployment/docker)
 
 ## Prerequisites
 
-- Kubernetes 1.19+
-- Helm 3.2.0+
+- Kubernetes 1.25+
+- Helm 3.10+ minimum, 3.14+ recommended
 - PV provisioner support in the underlying infrastructure
 - [Backstage container image](https://backstage.io/docs/deployment/docker)
 
@@ -106,8 +105,8 @@ Kubernetes: `>= 1.19.0-0`
 
 | Repository | Name | Version |
 |------------|------|---------|
-| https://charts.bitnami.com/bitnami | common | 2.x.x |
-| https://charts.bitnami.com/bitnami | postgresql | 12.x.x |
+| oci://registry-1.docker.io/bitnamicharts | common | 2.10.0 |
+| oci://registry-1.docker.io/bitnamicharts | postgresql | 12.10.0 |
 
 ## Values
 
@@ -128,6 +127,7 @@ Kubernetes: `>= 1.19.0-0`
 | backstage.extraEnvVarsSecrets | Backstage container environment variables from existing Secrets | list | `[]` |
 | backstage.extraVolumeMounts | Backstage container additional volume mounts | list | `[]` |
 | backstage.extraVolumes | Backstage container additional volumes | list | `[]` |
+| backstage.image.digest | Backstage image digest (digest takes precedence over image tag) | string | `""` |
 | backstage.image.pullPolicy | Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent' <br /> Ref: https://kubernetes.io/docs/concepts/containers/images/#image-pull-policy | string | `"Always"` |
 | backstage.image.pullSecrets | Optionally specify an array of imagePullSecrets.  Secrets must be manually created in the namespace. <br /> Ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/ <br /> E.g: `pullSecrets: [myRegistryKeySecretName]` | list | `[]` |
 | backstage.image.registry | Backstage image registry | string | `"ghcr.io"` |
@@ -158,11 +158,12 @@ Kubernetes: `>= 1.19.0-0`
 | global | Global parameters Global Docker image parameters Please, note that this will override the image parameters, including dependencies, configured to use the global value Current available global Docker image parameters: imageRegistry, imagePullSecrets and storageClass | object | See below |
 | global.imagePullSecrets | Global Docker registry secret names as an array </br> E.g. `imagePullSecrets: [myRegistryKeySecretName]` | list | `[]` |
 | global.imageRegistry | Global Docker image registry | string | `""` |
-| ingress | Ingress parameters | object | `{"annotations":{},"className":"","enabled":false,"host":"","tls":{"enabled":false,"secretName":""}}` |
+| ingress | Ingress parameters | object | `{"annotations":{},"className":"","enabled":false,"host":"","path":"/","tls":{"enabled":false,"secretName":""}}` |
 | ingress.annotations | Additional annotations for the Ingress resource | object | `{}` |
 | ingress.className | Name of the IngressClass cluster resource which defines which controller will implement the resource (e.g nginx) | string | `""` |
 | ingress.enabled | Enable the creation of the ingress resource | bool | `false` |
 | ingress.host | Hostname to be used to expose the route to access the backstage application (e.g: backstage.IP.nip.io) | string | `""` |
+| ingress.path | Path to be used to expose the full route to access the backstage application (e.g: IP.nip.io/backstage) | string | `"/"` |
 | ingress.tls | Ingress TLS parameters | object | `{"enabled":false,"secretName":""}` |
 | ingress.tls.enabled | Enable TLS configuration for the host defined at `ingress.host` parameter | bool | `false` |
 | ingress.tls.secretName | The name to which the TLS Secret will be called | string | `""` |

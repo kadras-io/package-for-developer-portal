@@ -7,7 +7,7 @@ backstage:
   image:
     registry: ghcr.io
     repository: kadras-io/kadras-developer-portal
-    tag: latest
+    tag: sha-ce9c944f1884a5406b720ab5cf464139c8036918
   
   args:
     - '--config'
@@ -46,7 +46,6 @@ backstage:
       value: "--no-node-snapshot"
   
   extraEnvVarsSecrets:
-    - backstage-credentials
     - developer-portal-secrets
 
 ingress:
@@ -67,7 +66,7 @@ postgresql:
   image:
     registry: docker.io
     repository: bitnami/postgresql
-    tag: 16.2.0
+    tag: 16.4.0
     pullSecrets:
       - canonical-registry-credentials
   primary:

@@ -5,7 +5,7 @@ directories:
       name: backstage
       repository:
         url: oci://ghcr.io/backstage/charts
-      version: 1.9.1
+      version: 1.9.6
     path: backstage
   path: config/helm/upstream
 kind: Config

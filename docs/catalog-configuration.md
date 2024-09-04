@@ -8,11 +8,11 @@ backstage:
     catalog:
       locations:
         - type: url
-          target: https://github.com/ThomasVitale/symphony-for-dev-and-platform/blob/main/platform/catalog/organization/catalog-info.yml
+          target: https://github.com/kadras-io/kadras-developer-portal/blob/main/demo-catalog/organizations/organization-kadras.yml
           rules:
             - allow: [User, Group, Location]
         - type: url
-          target: https://github.com/ThomasVitale/symphony-for-dev-and-platform/blob/main/platform/catalog/templates/catalog-info.yml
+          target: https://github.com/kadras-io/kadras-developer-portal/blob/main/demo-catalog/templates/templates.yml
           rules:
             - allow: [Template, Location]
 ```

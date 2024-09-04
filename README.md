@@ -6,7 +6,7 @@
 [![The Apache 2.0 license badge](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 [![Follow us on Twitter](https://img.shields.io/static/v1?label=Twitter&message=Follow&color=1DA1F2)](https://twitter.com/kadrasIO)
 
-A Carvel package for the [Kadras Developer Portal](https://github.com/kadras-io/kadras-developer-portal), an application based on  [Backstage](https://backstage.io) that supports application developers with paved paths to production on Kubernetes.
+A Carvel package for the [Kadras Developer Portal](https://github.com/kadras-io/kadras-developer-portal), an application based on [Backstage](https://backstage.io) that supports application developers with paved paths to production on Kubernetes.
 
 ## 🚀&nbsp; Getting Started
 
@@ -77,7 +77,7 @@ The Kadras Developer Portal package can be customized via a `values.yml` file.
   ```yaml
   ingress:
     annotations:
-      cert-manager.io/cluster-issuer: letsencrypt-issuer
+      cert-manager.io/cluster-issuer: letsencrypt-prod-issuer
     className: contour
     host: backstage.kadras.io
   ```

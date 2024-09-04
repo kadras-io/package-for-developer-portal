@@ -12,5 +12,5 @@ metadata:
   namespace: backstage
 stringData:
   GITHUB_TOKEN: token
-  GITHUB_AUTH_PROVIDER_CLIENT_ID: clientId
-  GITHUB_AUTH_PROVIDER_CLIENT_SECRET: clientSecret
+  AUTH_GITHUB_CLIENT_ID: clientId
+  AUTH_GITHUB_CLIENT_SECRET: clientSecret
