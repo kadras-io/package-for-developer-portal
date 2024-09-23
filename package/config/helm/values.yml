@@ -7,7 +7,7 @@ backstage:
   image:
     registry: ghcr.io
     repository: kadras-io/kadras-developer-portal
-    tag: sha-ce9c944f1884a5406b720ab5cf464139c8036918
+    tag: sha-493602035336190ee7482c5d2329a46cad5caab6
   
   args:
     - '--config'
@@ -42,8 +42,6 @@ backstage:
   extraEnvVars:
     - name: BACKSTAGE_BASE_URL
       value: https://{{ .Values.ingress.host }}
-    - name: NODE_OPTIONS
-      value: "--no-node-snapshot"
   
   extraEnvVarsSecrets:
     - developer-portal-secrets
