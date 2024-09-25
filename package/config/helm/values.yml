@@ -7,7 +7,7 @@ backstage:
   image:
     registry: ghcr.io
     repository: kadras-io/kadras-developer-portal
-    tag: sha-493602035336190ee7482c5d2329a46cad5caab6
+    tag: sha-e9f347e2f131d6792638c6db791c26ad609cc31d
   
   args:
     - '--config'
