@@ -14,3 +14,4 @@ stringData:
   GITHUB_TOKEN: token
   AUTH_GITHUB_CLIENT_ID: clientId
   AUTH_GITHUB_CLIENT_SECRET: clientSecret
+  SONAR_TOKEN: othertoken
