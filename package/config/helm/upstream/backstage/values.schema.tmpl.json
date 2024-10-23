@@ -143,6 +143,29 @@
                         "backstage.10.0.0.1.nip.io"
                     ]
                 },
+                "extraHosts": {
+                    "title": "List of additional hostnames to be covered with this ingress record",
+                    "type": "array",
+                    "default": [],
+                    "items": {
+                        "type": "object",
+                        "additionalProperties": false,
+                        "properties": {
+                            "name": {
+                                "type": "string"
+                            },
+                            "path": {
+                                "type": "string"
+                            },
+                            "pathType": {
+                                "type": "string"
+                            },
+                            "port": {
+                                "type": "integer"
+                            }
+                        }
+                    }
+                },
                 "path": {
                     "title": "Path to be used to expose the full route to access the backstage application.",
                     "type": "string",
@@ -168,6 +191,14 @@
                             "default": ""
                         }
                     }
+                },
+                "extraTls": {
+                    "title": "The TLS configuration for additional hostnames to be covered with this ingress record.",
+                    "type": "array",
+                    "items": {
+                        "$ref": "https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/master/_definitions.json#/definitions/io.k8s.api.networking.v1.IngressTLS"
+                    },
+                    "default": []
                 }
             }
         },
@@ -286,6 +317,15 @@
                     },
                     "title": "Affinity for pod assignment",
                     "type": "object"
+                },
+                "topologySpreadConstraints": {
+                    "default": [],
+                    "description": "Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#pod-topology-spread-constraints",
+                    "items": {
+                        "$ref": "https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/master/_definitions.json#/definitions/io.k8s.api.core.v1.TopologySpreadConstraint"
+                    },
+                    "title": "Topology Spread Constraint for pod assignment",
+                    "type": "array"
                 },
                 "args": {
                     "title": "Backstage container command arguments",
@@ -415,12 +455,18 @@
                     "title": "Readiness probe",
                     "description": "Ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/",
                     "$ref": "https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/master/_definitions.json#/definitions/io.k8s.api.core.v1.Probe",
-                    "default": {},
+                    "default": {
+                        "httpGet": {
+                                "path": "/.backstage/health/v1/readiness",
+                                "port": 7007,
+                                "scheme": "HTTP"
+                            }
+                    },
                     "examples": [
                         {
                             "failureThreshold": 3,
                             "httpGet": {
-                                "path": "/healthcheck",
+                                "path": "/.backstage/health/v1/readiness",
                                 "port": 7007,
                                 "scheme": "HTTP"
                             },
@@ -435,12 +481,18 @@
                     "title": "Liveness probe",
                     "description": "Ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/",
                     "$ref": "https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/master/_definitions.json#/definitions/io.k8s.api.core.v1.Probe",
-                    "default": {},
+                    "default": {
+                        "httpGet": {
+                            "path": "/.backstage/health/v1/liveness",
+                            "port": 7007,
+                            "scheme": "HTTP"
+                        }
+                    },
                     "examples": [
                         {
                             "failureThreshold": 3,
                             "httpGet": {
-                                "path": "/healthcheck",
+                                "path": "/.backstage/health/v1/liveness",
                                 "port": 7007,
                                 "scheme": "HTTP"
                             },
@@ -455,12 +507,18 @@
                     "title": "Startup probe",
                     "description": "Ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/",
                     "$ref": "https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/master/_definitions.json#/definitions/io.k8s.api.core.v1.Probe",
-                    "default": {},
+                    "default": {
+                        "httpGet": {
+                            "path": "/.backstage/health/v1/liveness",
+                            "port": 7007,
+                            "scheme": "HTTP"
+                        }
+                    },
                     "examples": [
                         {
                             "failureThreshold": 3,
                             "httpGet": {
-                                "path": "/healthcheck",
+                                "path": "/.backstage/health/v1/liveness",
                                 "port": 7007,
                                 "scheme": "HTTP"
                             },
