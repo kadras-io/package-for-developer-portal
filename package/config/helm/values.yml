@@ -7,7 +7,7 @@ backstage:
   image:
     registry: ghcr.io
     repository: kadras-io/kadras-developer-portal
-    tag: sha-ff8dbe4f90f9be4136921fd28eaeb40da65f1cd6
+    tag: sha-331a391fef509501933fd7d314208bacd304c68f
   args:
     - '--config'
     - '/app/app-config.yaml'
@@ -63,7 +63,7 @@ postgresql:
   image:
     registry: docker.io
     repository: bitnami/postgresql
-    tag: 17.0.0
+    tag: 17.4.0
     pullSecrets:
       - canonical-registry-credentials
   primary:

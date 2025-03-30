@@ -2,7 +2,7 @@
 # Backstage Helm Chart
 
 [![Artifact Hub](https://img.shields.io/endpoint?url=https://artifacthub.io/badge/repository/backstage)](https://artifacthub.io/packages/search?repo=backstage)
-![Version: 2.0.0](https://img.shields.io/badge/Version-2.0.0-informational?style=flat-square)
+![Version: 2.4.0](https://img.shields.io/badge/Version-2.4.0-informational?style=flat-square)
 ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
 
 A Helm chart for deploying a Backstage application
@@ -51,7 +51,7 @@ This chart bootstraps a [Backstage](https://backstage.io/docs/deployment/docker)
 
 This chart focuses on providing users the same experience and functionality no matter what flavor of Kubernetes they use. This chart will support only patterns that are either customary for all Kubernetes flavors, are commonly used in the Bitnami charts ecosystem, and recognized as Backstage official patterns.
 
-We welcome other, more specialized, charts to use this cannonical chart as a direct dependency, expanding the feature set further, beyond this scope.
+We welcome other, more specialized, charts to use this canonical chart as a direct dependency, expanding the feature set further, beyond this scope.
 
 A list of derived charts:
 - OpenShift specialized chart: [Janus Backstage Helm chart](https://github.com/janus-idp/helm-backstage/tree/main/charts/backstage)
@@ -125,8 +125,10 @@ Kubernetes: `>= 1.19.0-0`
 | backstage.extraEnvVars | Backstage container environment variables | list | `[]` |
 | backstage.extraEnvVarsCM | Backstage container environment variables from existing ConfigMaps | list | `[]` |
 | backstage.extraEnvVarsSecrets | Backstage container environment variables from existing Secrets | list | `[]` |
+| backstage.extraPorts | Backstage container additional ports | list | `[]` |
 | backstage.extraVolumeMounts | Backstage container additional volume mounts | list | `[]` |
 | backstage.extraVolumes | Backstage container additional volumes | list | `[]` |
+| backstage.hostAliases | Host Aliases for the pod <br /> Ref: https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/ | list | `[]` |
 | backstage.image.digest | Backstage image digest (digest takes precedence over image tag) | string | `""` |
 | backstage.image.pullPolicy | Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent' <br /> Ref: https://kubernetes.io/docs/concepts/containers/images/#image-pull-policy | string | `"Always"` |
 | backstage.image.pullSecrets | Optionally specify an array of imagePullSecrets.  Secrets must be manually created in the namespace. <br /> Ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/ <br /> E.g: `pullSecrets: [myRegistryKeySecretName]` | list | `[]` |
@@ -171,13 +173,14 @@ Kubernetes: `>= 1.19.0-0`
 | ingress.tls.enabled | Enable TLS configuration for the host defined at `ingress.host` parameter | bool | `false` |
 | ingress.tls.secretName | The name to which the TLS Secret will be called | string | `""` |
 | kubeVersion | Override Kubernetes version | string | `""` |
-| metrics | Metrics configuration | object | `{"serviceMonitor":{"annotations":{},"enabled":false,"interval":null,"labels":{},"path":"/metrics"}}` |
-| metrics.serviceMonitor | ServiceMonitor configuration <br /> Allows configuring your backstage instance as a scrape target for [Prometheus](https://github.com/prometheus/prometheus) using a ServiceMonitor custom resource that [Prometheus Operator](https://github.com/prometheus-operator/prometheus-operator) can understand. | object | `{"annotations":{},"enabled":false,"interval":null,"labels":{},"path":"/metrics"}` |
+| metrics | Metrics configuration | object | `{"serviceMonitor":{"annotations":{},"enabled":false,"interval":null,"labels":{},"path":"/metrics","port":"http-backend"}}` |
+| metrics.serviceMonitor | ServiceMonitor configuration <br /> Allows configuring your backstage instance as a scrape target for [Prometheus](https://github.com/prometheus/prometheus) using a ServiceMonitor custom resource that [Prometheus Operator](https://github.com/prometheus-operator/prometheus-operator) can understand. | object | `{"annotations":{},"enabled":false,"interval":null,"labels":{},"path":"/metrics","port":"http-backend"}` |
 | metrics.serviceMonitor.annotations | ServiceMonitor annotations | object | `{}` |
 | metrics.serviceMonitor.enabled | If enabled, a ServiceMonitor resource for Prometheus Operator is created <br /> Prometheus Operator must be installed in your cluster prior to enabling. | bool | `false` |
 | metrics.serviceMonitor.interval | ServiceMonitor scrape interval | string | `nil` |
 | metrics.serviceMonitor.labels | Additional ServiceMonitor labels | object | `{}` |
 | metrics.serviceMonitor.path | ServiceMonitor endpoint path <br /> Note that the /metrics endpoint is NOT present in a freshly scaffolded Backstage app. To setup, follow the [Prometheus metrics tutorial](https://github.com/backstage/backstage/blob/master/contrib/docs/tutorials/prometheus-metrics.md). | string | `"/metrics"` |
+| metrics.serviceMonitor.port | ServiceMonitor endpoint port <br /> The port where the metrics are exposed. If using OpenTelemetry as [documented here](https://backstage.io/docs/tutorials/setup-opentelemetry/), then the port needs to be explicitely specificed. OpenTelemetry's default port is 9464. | string | `"http-backend"` |
 | nameOverride | String to partially override common.names.fullname | string | `""` |
 | networkPolicy.egressRules.customRules | Additional custom egress rules | list | `[]` |
 | networkPolicy.egressRules.denyConnectionsToExternal | Deny external connections. Should not be enabled when working with an external database. | bool | `false` |
@@ -201,6 +204,8 @@ Kubernetes: `>= 1.19.0-0`
 | service.clusterIP | Backstage service Cluster IP  <br /> E.g `clusterIP: None` | string | `""` |
 | service.externalTrafficPolicy | Backstage service external traffic policy  Ref: https://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip | string | `"Cluster"` |
 | service.extraPorts | Extra ports to expose in the Backstage service (normally used with the `sidecar` value) | list | `[]` |
+| service.ipFamilies | IP Families  <br /> Ref: https://kubernetes.io/docs/concepts/services-networking/dual-stack | list | `[]` |
+| service.ipFamilyPolicy | IP Family Policy  <br /> Ref: https://kubernetes.io/docs/concepts/services-networking/dual-stack | string | `""` |
 | service.loadBalancerIP | Backstage service Load Balancer IP  <br /> Ref: https://kubernetes.io/docs/concepts/services-networking/service/#loadbalancer | string | `""` |
 | service.loadBalancerSourceRanges | Load Balancer sources  <br /> Ref: https://kubernetes.io/docs/concepts/services-networking/service/#loadbalancer <br /> E.g `loadBalancerSourceRanges: [10.10.10.0/24]` | list | `[]` |
 | service.nodePorts | Node port for the Backstage client connections Choose port between `30000-32767` | object | `{"backend":""}` |

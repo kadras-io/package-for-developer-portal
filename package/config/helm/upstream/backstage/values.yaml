@@ -158,6 +158,9 @@ backstage:
   # -- Backstage container environment variables from existing Secrets
   extraEnvVarsSecrets: []
 
+  # -- Backstage container additional ports
+  extraPorts: []
+
   # -- Backstage container additional volume mounts
   extraVolumeMounts: []
 
@@ -278,6 +281,10 @@ backstage:
   #    value: "value"
   #    effect: "NoSchedule|PreferNoSchedule|NoExecute"
 
+  # -- Host Aliases for the pod
+  # <br /> Ref: https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+  hostAliases: []
+
   # -- Annotations to add to the backend deployment pods
   podAnnotations: {}
 
@@ -344,6 +351,16 @@ service:
 
   # -- Extra ports to expose in the Backstage service (normally used with the `sidecar` value)
   extraPorts: []
+
+  # -- IP Family Policy
+  #
+  # <br /> Ref: https://kubernetes.io/docs/concepts/services-networking/dual-stack
+  ipFamilyPolicy: ""
+
+  # -- IP Families
+  #
+  # <br /> Ref: https://kubernetes.io/docs/concepts/services-networking/dual-stack
+  ipFamilies: []
 
 ## @section NetworkPolicy parameters
 ##
@@ -460,3 +477,7 @@ metrics:
     # -- ServiceMonitor endpoint path
     # <br /> Note that the /metrics endpoint is NOT present in a freshly scaffolded Backstage app. To setup, follow the [Prometheus metrics tutorial](https://github.com/backstage/backstage/blob/master/contrib/docs/tutorials/prometheus-metrics.md).
     path: /metrics
+
+    # -- ServiceMonitor endpoint port
+    # <br /> The port where the metrics are exposed. If using OpenTelemetry as [documented here](https://backstage.io/docs/tutorials/setup-opentelemetry/), then the port needs to be explicitely specificed. OpenTelemetry's default port is 9464.
+    port: http-backend

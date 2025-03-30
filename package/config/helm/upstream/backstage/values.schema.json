@@ -1131,7 +1131,7 @@
                             "envFrom": {
                                 "description": "List of sources to populate environment variables in the container. The keys defined within a source must be a C_IDENTIFIER. All invalid keys will be reported as an event when the container is starting. When a key exists in multiple sources, the value associated with the last source will take precedence. Values defined by an Env with a duplicate key will take precedence. Cannot be updated.",
                                 "items": {
-                                    "description": "EnvFromSource represents the source of a set of ConfigMaps",
+                                    "description": "EnvFromSource represents the source of a set of ConfigMaps or Secrets",
                                     "properties": {
                                         "configMapRef": {
                                             "description": "ConfigMapEnvSource selects a ConfigMap to populate the environment variables with.\n\nThe contents of the target ConfigMap's Data field will represent the key-value pairs as environment variables.",
@@ -1148,7 +1148,7 @@
                                             "type": "object"
                                         },
                                         "prefix": {
-                                            "description": "An optional identifier to prepend to each key in the ConfigMap. Must be a C_IDENTIFIER.",
+                                            "description": "Optional text to prepend to the name of each environment variable. Must be a C_IDENTIFIER.",
                                             "type": "string"
                                         },
                                         "secretRef": {
@@ -1430,6 +1430,7 @@
                                         "type": "integer"
                                     },
                                     "grpc": {
+                                        "description": "GRPCAction specifies an action involving a GRPC service.",
                                         "properties": {
                                             "port": {
                                                 "description": "Port number of the gRPC service. Number must be in the range 1 to 65535.",
@@ -1620,6 +1621,7 @@
                                         "type": "integer"
                                     },
                                     "grpc": {
+                                        "description": "GRPCAction specifies an action involving a GRPC service.",
                                         "properties": {
                                             "port": {
                                                 "description": "Port number of the gRPC service. Number must be in the range 1 to 65535.",
@@ -2002,6 +2004,7 @@
                                         "type": "integer"
                                     },
                                     "grpc": {
+                                        "description": "GRPCAction specifies an action involving a GRPC service.",
                                         "properties": {
                                             "port": {
                                                 "description": "Port number of the gRPC service. Number must be in the range 1 to 65535.",
@@ -2384,6 +2387,42 @@
                         "type": "string"
                     },
                     "title": "Backstage container environment variables from existing Secrets",
+                    "type": "array"
+                },
+                "extraPorts": {
+                    "default": [],
+                    "items": {
+                        "description": "ContainerPort represents a network port in a single container.",
+                        "properties": {
+                            "containerPort": {
+                                "description": "Number of port to expose on the pod's IP address. This must be a valid port number, 0 < x < 65536.",
+                                "format": "int32",
+                                "type": "integer"
+                            },
+                            "hostIP": {
+                                "description": "What host IP to bind the external port to.",
+                                "type": "string"
+                            },
+                            "hostPort": {
+                                "description": "Number of port to expose on the host. If specified, this must be a valid port number, 0 < x < 65536. If HostNetwork is specified, this must match ContainerPort. Most containers do not need this.",
+                                "format": "int32",
+                                "type": "integer"
+                            },
+                            "name": {
+                                "description": "If specified, this must be an IANA_SVC_NAME and unique within the pod. Each named port in a pod must have a unique name. Name for the port that can be referred to by services.",
+                                "type": "string"
+                            },
+                            "protocol": {
+                                "description": "Protocol for port. Must be UDP, TCP, or SCTP. Defaults to \"TCP\".",
+                                "type": "string"
+                            }
+                        },
+                        "required": [
+                            "containerPort"
+                        ],
+                        "type": "object"
+                    },
+                    "title": "Extra ports to expose in the Backstage container",
                     "type": "array"
                 },
                 "extraVolumeMounts": {
@@ -2979,6 +3018,7 @@
                                                         "x-kubernetes-map-type": "atomic"
                                                     },
                                                     "dataSourceRef": {
+                                                        "description": "TypedObjectReference contains enough information to let you locate the typed referenced object",
                                                         "properties": {
                                                             "apiGroup": {
                                                                 "description": "APIGroup is the group for the resource being referenced. If APIGroup is not specified, the specified Kind must be in the core API group. For any other third-party types, APIGroup is required.",
@@ -3978,6 +4018,33 @@
                     "title": "Backstage container additional volumes",
                     "type": "array"
                 },
+                "hostAliases": {
+                    "default": [],
+                    "description": "Ref: https://kubernetes.io/docs/tasks/network/customize-hosts-file-for-pods/#adding-additional-entries-with-hostaliases",
+                    "items": {
+                        "description": "HostAlias holds the mapping between IP and hostnames that will be injected as an entry in the pod's hosts file.",
+                        "properties": {
+                            "hostnames": {
+                                "description": "Hostnames for the above IP address.",
+                                "items": {
+                                    "type": "string"
+                                },
+                                "type": "array",
+                                "x-kubernetes-list-type": "atomic"
+                            },
+                            "ip": {
+                                "description": "IP address of the host file entry.",
+                                "type": "string"
+                            }
+                        },
+                        "required": [
+                            "ip"
+                        ],
+                        "type": "object"
+                    },
+                    "title": "Adding entries to a Pod's /etc/hosts file provides Pod-level override of hostname resolution when DNS and other options are not applicable",
+                    "type": "array"
+                },
                 "image": {
                     "additionalProperties": false,
                     "properties": {
@@ -4181,7 +4248,7 @@
                             "envFrom": {
                                 "description": "List of sources to populate environment variables in the container. The keys defined within a source must be a C_IDENTIFIER. All invalid keys will be reported as an event when the container is starting. When a key exists in multiple sources, the value associated with the last source will take precedence. Values defined by an Env with a duplicate key will take precedence. Cannot be updated.",
                                 "items": {
-                                    "description": "EnvFromSource represents the source of a set of ConfigMaps",
+                                    "description": "EnvFromSource represents the source of a set of ConfigMaps or Secrets",
                                     "properties": {
                                         "configMapRef": {
                                             "description": "ConfigMapEnvSource selects a ConfigMap to populate the environment variables with.\n\nThe contents of the target ConfigMap's Data field will represent the key-value pairs as environment variables.",
@@ -4198,7 +4265,7 @@
                                             "type": "object"
                                         },
                                         "prefix": {
-                                            "description": "An optional identifier to prepend to each key in the ConfigMap. Must be a C_IDENTIFIER.",
+                                            "description": "Optional text to prepend to the name of each environment variable. Must be a C_IDENTIFIER.",
                                             "type": "string"
                                         },
                                         "secretRef": {
@@ -4480,6 +4547,7 @@
                                         "type": "integer"
                                     },
                                     "grpc": {
+                                        "description": "GRPCAction specifies an action involving a GRPC service.",
                                         "properties": {
                                             "port": {
                                                 "description": "Port number of the gRPC service. Number must be in the range 1 to 65535.",
@@ -4670,6 +4738,7 @@
                                         "type": "integer"
                                     },
                                     "grpc": {
+                                        "description": "GRPCAction specifies an action involving a GRPC service.",
                                         "properties": {
                                             "port": {
                                                 "description": "Port number of the gRPC service. Number must be in the range 1 to 65535.",
@@ -5052,6 +5121,7 @@
                                         "type": "integer"
                                     },
                                     "grpc": {
+                                        "description": "GRPCAction specifies an action involving a GRPC service.",
                                         "properties": {
                                             "port": {
                                                 "description": "Port number of the gRPC service. Number must be in the range 1 to 65535.",
@@ -5310,6 +5380,7 @@
                             "type": "integer"
                         },
                         "grpc": {
+                            "description": "GRPCAction specifies an action involving a GRPC service.",
                             "properties": {
                                 "port": {
                                     "description": "Port number of the gRPC service. Number must be in the range 1 to 65535.",
@@ -5631,6 +5702,7 @@
                             "type": "integer"
                         },
                         "grpc": {
+                            "description": "GRPCAction specifies an action involving a GRPC service.",
                             "properties": {
                                 "port": {
                                     "description": "Port number of the gRPC service. Number must be in the range 1 to 65535.",
@@ -5846,6 +5918,7 @@
                             "type": "integer"
                         },
                         "grpc": {
+                            "description": "GRPCAction specifies an action involving a GRPC service.",
                             "properties": {
                                 "port": {
                                     "description": "Port number of the gRPC service. Number must be in the range 1 to 65535.",
@@ -6352,6 +6425,19 @@
                             "description": "ote that the /metrics endpoint is NOT present in a freshly scaffolded Backstage app. To setup, follow the Prometheus metrics tutorial. https://github.com/backstage/backstage/blob/master/contrib/docs/tutorials/prometheus-metrics.md",
                             "title": "ServiceMonitor endpoint path",
                             "type": "string"
+                        },
+                        "port": {
+                            "anyOf": [
+                                {
+                                    "type": "string"
+                                },
+                                {
+                                    "type": "integer"
+                                }
+                            ],
+                            "default": "http-backend",
+                            "description": "The port where the metrics are exposed. If using OpenTelemetry as [documented here](https://backstage.io/docs/tutorials/setup-opentelemetry/), then the port needs to be explicitely specificed. OpenTelemetry's default port is 9464.",
+                            "title": "ServiceMonitor endpoint port"
                         }
                     },
                     "title": "ServiceMonitor configuration",
@@ -6964,6 +7050,31 @@
                     },
                     "title": "Extra ports to expose in the Backstage service",
                     "type": "array"
+                },
+                "ipFamilies": {
+                    "default": [],
+                    "description": "Ref: https://kubernetes.io/docs/concepts/services-networking/dual-stack/#services",
+                    "items": {
+                        "enum": [
+                            "IPv4",
+                            "IPv6"
+                        ],
+                        "type": "string"
+                    },
+                    "title": "Backstage service IP families",
+                    "type": "array"
+                },
+                "ipFamilyPolicy": {
+                    "default": "",
+                    "description": "Ref: https://kubernetes.io/docs/concepts/services-networking/dual-stack/#services",
+                    "enum": [
+                        "",
+                        "SingleStack",
+                        "PreferDualStack",
+                        "RequireDualStack"
+                    ],
+                    "title": "Backstage service IP family policy",
+                    "type": "string"
                 },
                 "loadBalancerIP": {
                     "default": "",
