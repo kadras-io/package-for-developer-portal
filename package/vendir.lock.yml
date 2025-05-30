@@ -3,7 +3,7 @@ directories:
 - contents:
   - helmChart:
       appVersion: ""
-      version: 2.4.0
+      version: 2.5.2
     path: backstage
   path: config/helm/upstream
 kind: LockConfig
