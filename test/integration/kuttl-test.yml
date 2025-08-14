@@ -20,8 +20,8 @@ commands:
         -f https://github.com/kadras-io/package-for-secretgen-controller/releases/download/v0.19.2/package.yml \
         -f https://github.com/kadras-io/package-for-secretgen-controller/releases/download/v0.19.2/metadata.yml
       kapp deploy -a cert-manager-package -y \
-        -f https://github.com/kadras-io/package-for-cert-manager/releases/download/v1.17.2/package.yml \
-        -f https://github.com/kadras-io/package-for-cert-manager/releases/download/v1.17.2/metadata.yml
+        -f https://github.com/kadras-io/package-for-cert-manager/releases/download/v1.18.2/package.yml \
+        -f https://github.com/kadras-io/package-for-cert-manager/releases/download/v1.18.2/metadata.yml
       kapp deploy -a contour-package -y \
         -f https://github.com/kadras-io/package-for-contour/releases/download/v1.32.0/package.yml \
         -f https://github.com/kadras-io/package-for-contour/releases/download/v1.32.0/metadata.yml
